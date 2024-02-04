@@ -92,9 +92,9 @@ class Snake {
       newHead = new Block(this.canvas, head.col, head.row - 1);
     }
 
-     if (this.checkCollision(newHead)) {
+    if (this.checkCollision(newHead)) {
       //gameOver();
-      alert ("game Over!");
+      alert("game Over!");
       return;
     }
     this.segments.unshift(newHead);
@@ -139,29 +139,51 @@ class Snake {
   };
 }
 
-let directions = {
-  37: "left",
-  38: "up",
-  39: "right",
-  40: "down",
-};
-
-let apple = new Apple(canvas);
-this.context = canvas.getContext("2d");
-addEventListener("keydown", function (event) {
-  let newDirection = directions[event.keyCode];
-  if (newDirection !== undefined) {
-    snake.setDirection(newDirection);
+class Game {
+  intervalId;
+  constructor(canvas) {
+    this.context = canvas.getContext("2d");
+    this.canvas = canvas;
+    this.score = 0;
+    this.directions = {
+      37: "left",
+      38: "up",
+      39: "right",
+      40: "down",
+    };
+    this.apple = new Apple(canvas);
+    this.snake = new Snake(canvas);
   }
-});
 
-const snake = new Snake(canvas);
+  drawBorder = function (blockSize = 10) {
+    this.context.fillStyle = "Gray";
+    this.context.fillRect(0, 0, this.canvas.width, blockSize);
+    this.context.fillRect(0, this.canvas.height - blockSize, this.canvas.width, blockSize);
+    this.context.fillRect(0, 0, blockSize, this.canvas.height);
+    this.context.fillRect(this.canvas.width - blockSize, 0, blockSize, this.canvas.height);
+  };
+}
 
-let intervalId = setInterval(function () {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  // drawScore();
-  snake.move(apple);
-  snake.draw();
-  apple.draw();
-  // drawBorder();
-}, 100);
+// let apple = new Apple(canvas);
+// this.context = canvas.getContext("2d");
+// addEventListener("keydown", function (event) {
+//   let newDirection = directions[event.keyCode];
+//   if (newDirection !== undefined) {
+//     snake.setDirection(newDirection);
+//   }
+// });
+
+// const snake = new Snake(canvas);
+
+// let intervalId = setInterval(function () {
+//   context.clearRect(0, 0, canvas.width, canvas.height);
+//   // drawScore();
+//   snake.move(apple);
+//   snake.draw();
+//   apple.draw();
+//   // drawBorder();
+// }, 100);
+
+
+const game= new Game(canvas);
+game.drawBorder();
