@@ -158,9 +158,40 @@ class Game {
   drawBorder = function (blockSize = 10) {
     this.context.fillStyle = "Gray";
     this.context.fillRect(0, 0, this.canvas.width, blockSize);
-    this.context.fillRect(0, this.canvas.height - blockSize, this.canvas.width, blockSize);
+    this.context.fillRect(
+      0,
+      this.canvas.height - blockSize,
+      this.canvas.width,
+      blockSize
+    );
     this.context.fillRect(0, 0, blockSize, this.canvas.height);
-    this.context.fillRect(this.canvas.width - blockSize, 0, blockSize, this.canvas.height);
+    this.context.fillRect(
+      this.canvas.width - blockSize,
+      0,
+      blockSize,
+      this.canvas.height
+    );
+  };
+
+  drawScore = function (blockSize = 10) {
+    this.context.font = "20px Courier";
+    this.context.fillStyle = "Black";
+    this.context.textAlign = "left";
+    this.context.textBaseline = "top";
+    this.context.fillText("Рахунок: " + this.score, blockSize, blockSize);
+  };
+
+  gameOver = function () {
+    // clearInterval(this.intervalId);
+    this.context.font = "60px Courier";
+    this.context.fillStyle = "Black";
+    this.context.textAlign = "center";
+    this.context.textBaseline = "middle";
+    this.context.fillText(
+      "Кінець гри",
+      this.canvas.width / 2,
+      this.canvas.height / 2
+    );
   };
 }
 
@@ -184,6 +215,7 @@ class Game {
 //   // drawBorder();
 // }, 100);
 
-
-const game= new Game(canvas);
+const game = new Game(canvas);
 game.drawBorder();
+game.gameOver();
+game.drawScore();
