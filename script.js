@@ -55,7 +55,7 @@ class Apple {
     const heightInBlocks = this.canvas.height / this.block.blockSize;
     let randomCol = Math.floor(Math.random() * (widthInBlocks - 2)) + 1;
     let randomRow = Math.floor(Math.random() * (heightInBlocks - 2)) + 1;
-    this.block = new Block(randomCol, randomRow);
+    this.block = new Block(canvas, randomCol, randomRow);
   };
 }
 
@@ -78,7 +78,7 @@ class Snake {
     }
   };
 
-  move = function (apple) {
+  move = function (apple, game) {
     let head = this.segments[0];
     let newHead;
     this.direction = this.nextDirection;
@@ -93,14 +93,14 @@ class Snake {
     }
 
     if (this.checkCollision(newHead)) {
-      //gameOver();
-      alert("game Over!");
+      game.gameOver();
+     // alert("game Over!");
       return;
     }
     this.segments.unshift(newHead);
 
     if (newHead.equal(apple.block)) {
-      // score++;
+      game.score++;
       apple.move();
     } else {
       this.segments.pop();
@@ -182,7 +182,7 @@ class Game {
   };
 
   gameOver = function () {
-    // clearInterval(this.intervalId);
+    clearInterval(this.intervalId);
     this.context.font = "60px Courier";
     this.context.fillStyle = "Black";
     this.context.textAlign = "center";
@@ -193,6 +193,25 @@ class Game {
       this.canvas.height / 2
     );
   };
+
+  go() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.drawScore();
+    this.snake.move(this.apple, this);
+    this.snake.draw();
+    this.apple.draw();
+    this.drawBorder();
+  }
+
+  start() {
+    this.intervalId = setInterval(this.go.bind(this), 200);
+    addEventListener("keydown", (event) => {
+      let newDirection = this.directions[event.keyCode];
+      if (newDirection !== undefined) {
+        this.snake.setDirection(newDirection);
+      }
+    });
+  }
 }
 
 // let apple = new Apple(canvas);
@@ -216,6 +235,7 @@ class Game {
 // }, 100);
 
 const game = new Game(canvas);
-game.drawBorder();
-game.gameOver();
-game.drawScore();
+game.start();
+// game.drawBorder();
+// game.gameOver();
+// game.drawScore();
